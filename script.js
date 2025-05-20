@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (helpDeskToggle) {
         helpDeskToggle.addEventListener('click', function() {
-            helpDeskContent.classList.add('active');
+            helpDeskContent.classList.toggle('active');
         });
     }
 
