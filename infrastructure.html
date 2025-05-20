@@ -983,10 +983,32 @@ ul {
             <span>Chat on WhatsApp</span>
         </a>
     </div>
-     <!-- Vertical Open Enquiry Button -->
+      <!-- Vertical Open Enquiry Button -->
     <!-- Updated Open Enquiry Button with Enhanced Visibility -->
-    <button class="enquiry-btn" id="openEnquiryBtn" aria-label="Open Enquiry Form">
+    <button class="enquiry-btn" id="openEnquiryBtn" style="
+    position: fixed;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    background-color: #FF6B00;
+    color: white;
+    padding: 12px 18px 12px 12px;
+    border: none;
+    border-radius: 8px 0 0 8px;
+    z-index: 2100;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: -3px 3px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    ">
+    <i class="fas fa-envelope" style="font-size: 18px;"></i>
+    <span style="writing-mode: vertical-rl; transform: rotate(180deg); text-transform: uppercase; letter-spacing: 1px;">Enquire Now</span>
     </button>
+
 
     
     <script src="script.js"></script>
