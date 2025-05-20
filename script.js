@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+    
     // Mobile Navigation Toggle
     const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
     const mainNav = document.querySelector('.main-nav');
@@ -6,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (mobileNavToggle) {
         mobileNavToggle.addEventListener('click', function() {
             mainNav.classList.toggle('active');
+            document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
             // Toggle between bars and times icon
             const icon = this.querySelector('i');
             if (icon.classList.contains('fa-bars')) {
@@ -54,57 +56,57 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Mobile Dropdown Menus
-    const dropdownItems = document.querySelectorAll('.has-dropdown');
-    if (window.innerWidth <= 768) {
+    // Mobile Dropdown Menus (works on resize too)
+    function setupMobileDropdowns() {
+        const dropdownItems = document.querySelectorAll('.has-dropdown');
         dropdownItems.forEach(item => {
             const link = item.querySelector('a');
-            link.addEventListener('click', function(e) {
-                if (window.innerWidth <= 768) {
+            // Remove previous listeners
+            link.onclick = null;
+            if (window.innerWidth <= 768) {
+                link.onclick = function(e) {
                     e.preventDefault();
                     item.classList.toggle('active');
-                }
-            });
+                };
+            }
         });
     }
+    setupMobileDropdowns();
+    window.addEventListener('resize', setupMobileDropdowns);
 
-    // Testimonial Slider
-    const testimonialSlides = document.querySelectorAll('.testimonial-slide');
-    const sliderDots = document.querySelectorAll('.slider-dot');
-    let currentSlide = 0;
-    let slideInterval;
-
-    function showSlide(index) {
-        testimonialSlides.forEach(slide => slide.classList.remove('active'));
-        sliderDots.forEach(dot => dot.classList.remove('active'));
-
-        testimonialSlides[index].classList.add('active');
-        sliderDots[index].classList.add('active');
-        currentSlide = index;
-    }
-
-    sliderDots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-            showSlide(index);
-            resetSlideInterval();
+    // Close menu when clicking a link (mobile)
+    document.querySelectorAll('.main-nav ul li a').forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                mainNav.classList.remove('active');
+                document.body.style.overflow = '';
+                const icon = mobileNavToggle.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
         });
     });
 
-    function startSlideInterval() {
-        slideInterval = setInterval(() => {
-            let nextSlide = (currentSlide + 1) % testimonialSlides.length;
-            showSlide(nextSlide);
-        }, 5000);
+    // Testimonial Slider
+    let slides = document.querySelectorAll('.testimonial-slide');
+    let dots = document.querySelectorAll('.slider-dot');
+    let idx = 0;
+
+    function showSlide(i) {
+        slides.forEach((s, j) => {
+            s.classList.toggle('active', j === i);
+            dots[j].classList.toggle('active', j === i);
+        });
+        idx = i;
     }
 
-    function resetSlideInterval() {
-        clearInterval(slideInterval);
-        startSlideInterval();
-    }
+    dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+    });
 
-    if (testimonialSlides.length > 0) {
-        startSlideInterval();
-    }
+    setInterval(() => {
+        showSlide((idx + 1) % slides.length);
+    }, 2000);
 
     // Help Desk Chat functionality
     const helpDeskToggle = document.querySelector('.help-desk-toggle');
@@ -187,30 +189,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
-            const href = this.getAttribute('href');
-
-            if (href === '#' || (window.innerWidth <= 768 && this.parentElement.classList.contains('has-dropdown'))) {
-                return;
-            }
-
-            e.preventDefault();
-
-            const targetElement = document.querySelector(href);
-            if (targetElement) {
-                const headerHeight = document.querySelector('header').offsetHeight;
-                const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-
-                if (mainNav.classList.contains('active')) {
-                    mainNav.classList.remove('active');
-                    const icon = mobileNavToggle.querySelector('i');
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                }
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                e.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth' });
             }
         });
     });
@@ -337,6 +319,55 @@ document.addEventListener('DOMContentLoaded', function() {
     // Select .content-block elements for scroll-triggered animation
     const blocksToAnimate = document.querySelectorAll('.content-block');
     blocksToAnimate.forEach(el => slideUpObserver.observe(el));
+
+    // Hero content fade-in effect
+    document.querySelectorAll('.hero-content h1, .hero-content p, .hero-content a').forEach(el => {
+        el.style.opacity = '1';
+    });
+
+    // Number animation for stats
+    function animateNumber(el, target, duration = 1200) {
+        let start = 0;
+        let startTime = null;
+        function updateNumber(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const progress = Math.min((timestamp - startTime) / duration, 1);
+            el.textContent = Math.floor(progress * (target - start) + start);
+            if (progress < 1) requestAnimationFrame(updateNumber);
+            else el.textContent = target + (el.dataset.suffix || '');
+        }
+        requestAnimationFrame(updateNumber);
+    }
+
+    function runStatsAnimation() {
+        document.querySelectorAll('.overview-card h3').forEach(card => {
+            if (!card.dataset.animated) {
+                const num = card.textContent.replace(/\D/g, '');
+                if (num) {
+                    card.dataset.animated = "true";
+                    animateNumber(card, parseInt(num), 1200);
+                }
+            }
+        });
+    }
+
+    window.addEventListener('scroll', function() {
+        const section = document.querySelector('.company-overview');
+        if (section && section.getBoundingClientRect().top < window.innerHeight - 100) {
+            runStatsAnimation();
+        }
+    });
+
+    // Reveal sections on scroll
+    function revealSectionsOnScroll() {
+        document.querySelectorAll('.section-fade').forEach(sec => {
+            if (sec.getBoundingClientRect().top < window.innerHeight - 80) {
+                sec.classList.add('visible');
+            }
+        });
+    }
+    window.addEventListener('scroll', revealSectionsOnScroll);
+    window.addEventListener('DOMContentLoaded', revealSectionsOnScroll);
 });
 
 window.addEventListener('load', () => {

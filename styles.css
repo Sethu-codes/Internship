@@ -25,6 +25,7 @@ body {
   line-height: 1.6;
   color: #333;
   background-color: white;
+  font-size: 1.12rem; /* Increased from default (typically 1rem) */
 }
 
 a {
@@ -43,7 +44,7 @@ ul {
 }
 
 .section-title {
-  font-size: 2.2rem;
+  font-size: 2.4rem; /* Slightly increased */
   text-align: center;
   margin-bottom: 40px;
   color: var(--dark-color);
@@ -60,6 +61,52 @@ ul {
   width: 60px;
   height: 3px;
   background-color: var(--accent-color);
+}
+
+.about-us-intro p,
+.about-vision-mission p,
+.overview-card p,
+.overview-card h3 {
+  font-size: 1.15rem;
+}
+
+/* ==== Hero Banner (Parallax) ==== */
+.hero-banner {
+  position: relative;
+  height: 80vh;
+  min-height: 500px;
+  background-image: var(--hero-image);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.hero-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 40px 20px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-overlay h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.hero-overlay .lead {
+  color: white;
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
 .btn-primary {
@@ -304,6 +351,31 @@ header .container {
   line-height: 1.4;
   align-items: flex-start;
 }
+/* Add to styles.css */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+.hero-content h1, .hero-content p, .hero-content a {
+  opacity: 0;
+  animation: fadeInUp 1s forwards;
+}
+.hero-content h1 { animation-delay: 0.2s; }
+.hero-content p { animation-delay: 0.5s; }
+.hero-content a { animation-delay: 0.8s; }
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255,107,0,0.4);}
+  70% { box-shadow: 0 0 0 12px rgba(255,107,0,0);}
+  100% { box-shadow: 0 0 0 0 rgba(255,107,0,0);}
+}
+.enquiry-btn {
+  animation: pulse 2s infinite;
+}
+/* Add to styles.css */
+button:active, .btn-primary:active, .btn-secondary:active, .btn-tertiary:active {
+  transform: scale(0.97);
+}
 
 /* ==== Quick Enquiry Section ==== */
 .quick-enquiry {
@@ -431,26 +503,212 @@ header .container {
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .project-card {
-  background-color: white;
-  border-radius: 8px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
   overflow: hidden;
-  box-shadow: var(--box-shadow);
-  transition: var(--transition);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
 }
 
 .project-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.13);
+}
+
+.project-image img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  background: #eee;
+  display: block;
+}
+
+.project-content {
+  padding: 20px 18px 16px 18px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.project-content h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.35rem;
+  color: #FF6B00;
+  font-family: 'Nunito', sans-serif;
+}
+
+.project-content p,
+.project-content .location {
+  margin: 0 0 12px 0;
+  color: #555;
+  font-size: 1.08rem;
+}
+
+.project-content .location {
+  font-size: 1rem;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.project-content .btn-secondary {
+  align-self: flex-start;
+  background: #FF6B00;
+  color: #fff;
+  padding: 8px 22px;
+  border-radius: 22px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.project-content .btn-secondary:hover {
+  background: #ff8c00;
+}
+
+.project-status {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  left: auto;
+  min-width: 70px;
+  width: auto;
+  background: linear-gradient(90deg, var(--accent-color) 60%, var(--secondary-color) 100%);
+  color: #fff;
+  padding: 5px 16px;
+  border-radius: 20px 4px 20px 4px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  z-index: 2;
+  text-align: center;
+  border: 2px solid #fff;
 }
 
 .project-image {
   position: relative;
-}/* Popup hidden by default */
+}
+
+.project-status.completed { background: #4CAF50; }
+.project-status.ongoing { background: #FF9800; }
+.project-status.upcoming { background: #2196F3; }
+
+@media (max-width: 600px) {
+  .projects-grid { gap: 18px; }
+  .project-card { min-width: 0; }
+}
+
+/* ==== Gallery Section ==== */
+.gallery-section {
+  padding: 60px 0;
+  background: #f8fafc;
+}
+
+.gallery-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  font-family: 'Playfair Display', serif;
+  color: #222;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.gallery-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.gallery-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.13);
+}
+
+.gallery-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  background: #eee;
+}
+
+.gallery-content {
+  padding: 20px 18px 16px 18px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.gallery-content h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.35rem;
+  color: #FF6B00;
+  font-family: 'Nunito', sans-serif;
+}
+
+.gallery-content p {
+  margin: 0 0 12px 0;
+  color: #555;
+  font-size: 1.08rem;
+}
+
+.gallery-content .location {
+  font-size: 1rem;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.gallery-content .btn-secondary {
+  align-self: flex-start;
+  background: #FF6B00;
+  color: #fff;
+  padding: 8px 22px;
+  border-radius: 22px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.gallery-content .btn-secondary:hover {
+  background: #ff8c00;
+}
+
+@media (max-width: 600px) {
+  .gallery-title { font-size: 2rem; }
+  .gallery-grid { gap: 18px; }
+  .gallery-card { min-width: 0; }
+}
+
+/* Add to styles.css */
+.project-card:hover, .gallery-card:hover {
+  box-shadow: 0 12px 32px rgba(255,107,0,0.13), 0 8px 24px rgba(0,0,0,0.13);
+}
+
+/* Popup hidden by default */
 #enquiryModal {
   display: none;
   position: fixed;
@@ -951,63 +1209,81 @@ footer {
 }
 
 @media screen and (max-width: 768px) {
+  .main-nav {
+    position: fixed;
+    top: 0;
+    left: -100vw;
+    width: 80vw;
+    max-width: 340px;
+    height: 100vh;
+    background: #fff;
+    box-shadow: 2px 0 16px rgba(0,0,0,0.12);
+    transition: left 0.3s cubic-bezier(0.4,0,0.2,1);
+    z-index: 2000;
+    overflow-y: auto;
+    border-right: 1px solid #eee;
+  }
+  .main-nav.active {
+    left: 0;
+  }
+  .mobile-nav-toggle {
+    display: block;
+    position: fixed;
+    top: 22px;
+    right: 24px;
+    z-index: 2101; /* higher than .main-nav */
+    font-size: 2rem;
+    color: #222;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+  
   header .container {
     padding: 10px 20px;
   }
   
-  .main-nav {
-    position: fixed;
-    top: 80px;
-    left: -100%;
-    width: 70%;
-    height: calc(100vh - 80px);
-    background-color: white;
-    transition: var(--transition);
-    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
-    z-index: 1000;
-  }
-  
-  .main-nav.active {
-    left: 0;
-  }
-  
   .main-nav ul {
     flex-direction: column;
-    padding: 20px;
+    padding: 40px 20px;
   }
   
   .main-nav ul li {
-    margin: 0;
-    margin-bottom: 15px;
+    margin: 0 0 20px 0;
+  }
+  
+  .main-nav ul li a {
+    font-size: 18px;
+    padding: 10px 0;
+    display: block;
   }
   
   .dropdown-menu {
     position: static;
-    width: 100%;
-    opacity: 1;
-    visibility: visible;
-    transform: none;
     box-shadow: none;
+    background: none;
+    display: none;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease;
+    padding: 0;
+    opacity: 0;
+    transition: max-height 0.3s, opacity 0.3s;
   }
-  
-  .dropdown-content {
-    flex-direction: column;
-  }
-  
-  .dropdown-section {
-    margin-bottom: 15px;
-  }
-  
   .has-dropdown.active .dropdown-menu {
-    max-height: 1000px;
-  }
-  
-  .mobile-nav-toggle {
     display: block;
+    max-height: 500px;
+    opacity: 1;
+    padding: 0 0 0 16px;
+  }
+  .dropdown-menu ul {
+    padding: 0;
+    margin: 0;
+  }
+  .dropdown-menu ul li a {
+    font-size: 16px;
+    padding: 8px 0 8px 16px;
+    color: #444;
+    font-weight: 400;
   }
   
   .hero-content h1 {
@@ -1047,6 +1323,29 @@ footer {
   .footer-bottom-links a {
     margin: 0 10px;
   }
+
+  .has-dropdown > a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .has-dropdown > a .dropdown-arrow {
+    margin-left: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .mobile-nav-toggle {
+    display: block;
+    position: absolute;
+    top: 22px;
+    right: 24px;
+    z-index: 2100;
+    font-size: 2rem;
+    color: #222;
+    cursor: pointer;
+  }
 }
 
 @media screen and (max-width: 576px) {
@@ -1055,7 +1354,16 @@ footer {
   }
   
   .section-title {
-    font-size: 1.8rem;
+    font-size: 2rem;
+  }
+  body {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-nav-toggle {
+    display: none;
   }
 }
 
@@ -1176,3 +1484,21 @@ footer {
   opacity: 1;
   transform: translateY(0);
 }
+
+main, .about-us-intro, .about-vision-mission, .company-journey, .Leadership {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Add to styles.css */
+.section-fade {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s, transform 0.7s;
+}
+.section-fade.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
